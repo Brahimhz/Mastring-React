@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { getMovies } from '../services/fakeMovieService';
+import Like from './common/like';
 
 class Movies extends React.Component {
 
@@ -22,6 +23,16 @@ class Movies extends React.Component {
         );
     }
 
+
+    handleClick = (movie) => {
+        const movies = [...this.state.movies]
+        const index = movies.indexOf(movie);
+        movies[index] = {...movie};
+        movies[index].liked = !movies[index].liked;
+
+        this.setState({movies});
+    }
+
     renderTable(){
         const movieLenght = this.state.movies.length;
 
@@ -29,13 +40,14 @@ class Movies extends React.Component {
             return null;
 
         return (
-            <table class="table m-3">
+            <table className="table m-3">
                 <thead>
                     <tr>
                         <th scope="col">Title</th>
                         <th scope="col">Genre</th>
                         <th scope="col">Stock</th>
                         <th scope="col">Rate</th>
+                        <th scope="col">Like</th>
                         <th scope="col">Action</th>
                     </tr>
                 </thead>
@@ -47,7 +59,23 @@ class Movies extends React.Component {
                                 <td>{movie.genre.name}</td>
                                 <td>{movie.numberInStock}</td>
                                 <td>{movie.dailyRentalRate}</td>
-                                <td><button type="button" class="btn btn-danger" onClick={() => this.DeleteMovie(movie._id)}>Delete</button></td>
+
+                                <td>
+                                    <Like 
+                                        key={movie._id} 
+                                        liked={movie.liked} 
+                                        onClick={() => this.handleClick(movie)}
+                                    />
+                                </td>
+
+                                <td>
+                                    <button 
+                                        type="button" 
+                                        className="btn btn-danger" 
+                                        onClick={() => this.DeleteMovie(movie._id)}>
+                                            Delete
+                                    </button>
+                                </td>
                             </tr>                            
                         )}
                     

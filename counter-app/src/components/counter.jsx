@@ -2,39 +2,43 @@ import React, { Component } from 'react'
 
 class Counter extends React.Component {
 
-    state = {
-        count : 0
-    };
-
-    handleIncrement = () => {
-
-        this.setState({count : this.state.count + 1 });
-    };
-
-
     render() { 
-
-        this.getBadgeClasses();
         
+        const { counter , onDelete , onIncrement , onDecrement } = this.props;
+
         return (
-        <React.Fragment>
-            <span className={this.getBadgeClasses()}>{this.formatCount()}</span>
-            <button onClick={this.handleIncrement} className='btn btn-secondary btn-sm'>increment</button>
-        </React.Fragment>
+        <div className="row">
+            <div className="col-sm-1">
+                <span className={this.getBadgeClasses(counter)}>{this.formatCount()}</span>
+            </div>
+            <div className="col-sm">
+                <button onClick={() => onIncrement(counter)} className='btn btn-secondary btn-sm m-2'>+</button>
+                <button onClick={() => onDecrement(counter)} className={this.getBtDecrementClasses(counter)}>-</button>
+                <button onClick={() => onDelete(counter.id)} className="btn btn-danger btn-sm m-2">x</button>
+            </div>
+            
+        </div>
         );
     }
 
 
-    getBadgeClasses() {
+    getBadgeClasses(counter) {
         let classes = "badge m-2 bg-";
-        classes += this.state.count === 0 ? "warning" : "primary";
+        classes += counter.value === 0 ? "warning" : "primary";
+
+        return classes;
+    }
+
+    getBtDecrementClasses(counter) {
+        let classes = "btn btn-secondary btn-sm m-2 ";
+        classes += counter.value === 0 ? "disabled" : "";
 
         return classes;
     }
 
     formatCount(){
-        const {count} = this.state;
-        return count == 0 ? "Zero" : count;
+        const {value} = this.props.counter;
+        return value == 0 ? "Zero" : value;
     }
 }
  
